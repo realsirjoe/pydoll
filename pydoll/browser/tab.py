@@ -340,6 +340,35 @@ class Tab(FindElementsMixin):
         return response['result']['result']['value']
 
     @property
+    async def page_source_real(self) -> str:
+        """
+        Get complete underlying source of current page (live DOM state).
+
+        If txt, xml or other file, browser will always generate an html wrapper
+        but this function only returns the actual txt, xml, html, ...
+
+        Currently supported: html, txt, xml
+        """
+
+        response: EvaluateResponse = await self._execute_command(
+            RuntimeCommands.evaluate('document.contentType')
+        )
+        content_type: str = response['result']['result']['value']
+
+        js: str = ""
+        if "text/plain" in content_type:
+            js = 'document.querySelector("body > pre").innerHTML'
+        elif "text/xml" in content_type:
+            js = 'document.querySelector("body > div#webkit-xml-viewer-source-xml").innerHTML'
+        else:
+            js = 'document.documentElement.outerHTML'
+
+        response = await self._execute_command(
+            RuntimeCommands.evaluate(js)
+        )
+        return response['result']['result']['value']
+
+    @property
     async def title(self) -> str:
         """Get current page title."""
         response: EvaluateResponse = await self._execute_command(
