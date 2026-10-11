@@ -64,6 +64,7 @@ from pydoll.exceptions import (
 from pydoll.extractor.engine import ExtractionEngine
 from pydoll.interactions import KeyboardAPI, MouseAPI, ScrollAPI
 from pydoll.interactions.iframe import IFrameContext
+from pydoll.protocol.base import T_CommandResponse
 from pydoll.protocol.browser.types import DownloadBehavior, DownloadProgressState
 from pydoll.protocol.dom.types import Node, ShadowRootType
 from pydoll.protocol.network.types import ResourceType
@@ -80,6 +81,7 @@ from pydoll.utils import (
     decode_base64_to_bytes,
     has_return_outside_function,
 )
+
 from pydoll.utils.bundle import (
     build_asset_filename,
     collect_frame_resources,
@@ -376,7 +378,7 @@ class Tab(FindElementsMixin):
         )
         return response['result']['result'].get('value', '')
 
-    async def enable_page_events(self):
+    async def enable_page_events(self) -> T_CommandResponse:
         """Enable CDP Page domain events (load, navigation, dialogs, etc.)."""
         logger.debug('Enabling Page events')
         response = await self._execute_command(PageCommands.enable())

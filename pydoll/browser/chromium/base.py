@@ -213,7 +213,7 @@ class Browser(ABC):  # noqa: PLR0904
         logger.info(f'Initial tab attached: {valid_tab_id}')
         return tab
 
-    async def stop(self):
+    async def stop(self) -> None:
         """
         Stop browser process and cleanup resources.
 

@@ -17,7 +17,7 @@ class ChromiumOptions(Options):
     the binary location of the browser executable.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initializes the Options instance.
 
